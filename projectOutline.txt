@@ -1,0 +1,23 @@
+FATE Game Workstation
+
+Each game contains characters, custom skill list, and a set of GMs (at least one)
+	Characters:
+		Have a name [text]
+		Have a player [int] (user id of account that owns the character)
+		Have a game [int] (game id of game that character belongs to)
+		Have a refresh [int]
+		Have skills [text] (sorted by skill rank, from 1 to infinity, chosen from the game's skill list)
+		Have Aspects [text] (one High Aspect, one Trouble, and many general aspects, default 3)
+		Have Stunts [text, text] (at least three, with title and description)
+		Have stress boxes [boolean] (1 to 4 mental/physical, number of each chosen by player)
+		Have consequences [text] (1 to 4, number chosen by player)
+		Can be visible or invisible to the rest of the game
+	Skill list:
+		Text skills specific to the game. Game starts with the default skill list, but skills can be added or removed by the game's GMs.
+	GMs:
+		List of user ids that have GM access to all characters in a game
+		GM control panel:
+			Check-list currently active characters
+			See all aspects of all active characters
+			See skills (including rank) of all active characters
+			See consequences of all active characters
