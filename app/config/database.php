@@ -55,12 +55,23 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'forge',
-			'username'  => 'forge',
-			'password'  => '',
+			'database'  => 'fate',
+			'username'  => 'root',
+			'password'  => 'root',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
+		),
+		
+		'mysql_users' => array(
+			'driver'	=> 'mysql',
+			'host'		=> 'localhost',
+			'database'	=> 'users',
+			'username'	=> 'root',
+			'password'	=> 'root',
+			'charset'	=> 'utf8',
+			'collation'	=> 'utf8_unicode_ci',
+			'prefix'	=> ''
 		),
 
 		'pgsql' => array(

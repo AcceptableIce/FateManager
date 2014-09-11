@@ -15,3 +15,7 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::get('/test/{id}/', function($id) {
+	return View::make('test')->with('character', Character::find($id));
+});
