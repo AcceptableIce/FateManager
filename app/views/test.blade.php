@@ -7,21 +7,39 @@
 @stop
 @section('script')
 <script type="text/javascript">
+
+(function (ko) {
+	ko.extenders.api = function(target, path) {
+		var baseUrl = "http://localhost:8888/fatemanager/public";
+		path = path.replace('{id}', {{$character->id}});
+		target.subscribe(function(newValue) {
+			$.post(baseUrl + path, {value: newValue});
+		});
+		
+	}
+	
+})(ko);
 function FateSheetVM() {
 	var self = this;
 	
 	self.id = ko.observable({{$character->id}});
-	self.name = ko.observable("{{$character->name}}");
-	self.description = ko.observable("{{$character->description}}");
+	self.name = ko.observable("{{$character->name}}").extend({'api': '/api/v1/character/{id}/update/name'});
+	self.description = ko.observable("{{$character->description}}").extend({'api': '/api/v1/character/{id}/update/description'});
 	self.refresh = ko.observable("{{$character->refresh}}");
-	self.aspects = ko.observableArray([]);
+	
+	self.aspects = [];
+	for(var i = 0; i < 5; i++) self.aspects.push(ko.observable(""));
+
+	@foreach($character->aspects()->get() as $a)
+		self.aspects[{{$a->position}}]("{{$a->name}}");
+	@endforeach
+	
+	for(i = 0; i < 5; i++) self.aspects[i].extend({'api': '/api/v1/character/{id}/update/aspect/' + i});
 	self.extras = ko.observable("{{$character->extras}}");
 	
 	self.physicalSkill = ko.observable("{{$character->campaign()->physicalSkill()->name}}");
 	self.mentalSkill = ko.observable("{{$character->campaign()->mentalSKill()->name}}");
-	@foreach($character->aspects()->get() as $a)
-	self.aspects.push("{{$a->name}}");
-	@endforeach
+
 	<?php $c4 = $character->consequences()->where('severity', 4)->first();
 	$c6 = $character->consequences()->where('severity', 6)->first();
 	?>
@@ -30,17 +48,6 @@ function FateSheetVM() {
 		self.consequences[0].push("{{$c->name}}");
 	@endforeach
 	
-	self.aspectList = ko.computed(function() {
-		var out = [];
-		for(var i = 0; i < 5; i++) {
-			if(self.aspects()[i]) {
-				out.push(self.aspects()[i]);
-			} else {
-				out.push("");
-			}
-		}
-		return out;
-	});
 	
 	self.skills = [];
 	for(i = 0; i < 5; i++) {
@@ -77,6 +84,7 @@ function FateSheetVM() {
 var viewModel = new FateSheetVM();
 ko.applyBindings(viewModel);
 
+
 </script>
 @stop
 @section('content')
@@ -93,8 +101,8 @@ ko.applyBindings(viewModel);
 	<div id="sheet-row-2">
 		<div id="sheet-aspect-set">
 			<div class="sheet-header" id="sheet-header-aspects">Aspects</div>
-			<!-- ko foreach: $root.aspectList -->
-			<div class="sheet-input-box sheet-input-aspect"><input class="sheet-editable" data-bind="value: $data, attr: {'placeholder': $index() == 0 ? 'High Concept' : $index() == 1 ? 'Trouble' : ''}" /></div>
+			<!-- ko foreach: $root.aspects -->
+			<div class="sheet-input-box sheet-input-aspect"><input class="sheet-editable" data-bind="value: $root.aspects[$index()], attr: {'placeholder': $index() == 0 ? 'High Concept' : $index() == 1 ? 'Trouble' : ''}" /></div>
 			<!-- /ko -->
 
 		</div>

@@ -11,11 +11,25 @@
 |
 */
 
-Route::get('/', function()
-{
+Route::get('/', function() {
 	return View::make('hello');
 });
 
 Route::get('/test/{id}/', function($id) {
 	return View::make('test')->with('character', Character::find($id));
+});
+
+Route::get('logout', array('uses' => 'HomeController@doLogout'));
+
+Route::get('login', array('uses' => 'HomeController@showLogin'));
+Route::post('login', array('uses' => 'HomeController@doLogin'));
+
+Route::post('createAccount', array('uses' => 'HomeController@createAccount'));
+
+Route::group(array('prefix' => 'api/v1'), function() {
+	Route::get('/test', 'EditAPIController@test');
+	Route::post('/character/{id}/update/name', 'EditAPIController@updateCharacterName');
+	Route::post('/character/{id}/update/description', 'EditAPIController@updateCharacterDescription');
+	Route::post('/character/{id}/update/aspect/{position}', 'EditAPIController@updateCharacterAspect');
+
 });
