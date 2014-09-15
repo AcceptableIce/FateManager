@@ -30,6 +30,10 @@ Route::group(array('prefix' => 'api/v1'), function() {
 	Route::get('/test', 'EditAPIController@test');
 	Route::post('/character/{id}/update/name', 'EditAPIController@updateCharacterName');
 	Route::post('/character/{id}/update/description', 'EditAPIController@updateCharacterDescription');
+	Route::post('/character/{id}/update/extras', 'EditAPIController@updateCharacterExtras');
+	Route::post('/character/{id}/update/refresh', 'EditAPIController@updateCharacterRefresh');
 	Route::post('/character/{id}/update/aspect/{position}', 'EditAPIController@updateCharacterAspect');
+	Route::post('/character/{id}/update/consequence/{severity}/{slot?}', 'EditAPIController@updateCharacterConsequence');
+	Route::post('/character/{id}/update/stress/{type}', 'EditAPIController@updateCharacterStress');
 
 });

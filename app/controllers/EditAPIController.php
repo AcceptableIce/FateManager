@@ -26,13 +26,41 @@ class EditApiController extends BaseController {
 		}
 	}
 	
+	public static function updateCharacterRefresh($id) {
+		$char = Character::find($id);
+		if(EditAPIController::validateOwner($char)) {
+			$char->refresh = Input::get('value');
+			$char->save();
+		}
+	}
+	
+	public static function updateCharacterExtras($id) {
+		$char = Character::find($id);
+		if(EditAPIController::validateOwner($char)) {
+			$char->extras = Input::get('value');
+			$char->save();
+		}
+	}
+	
+	
+	public static function updateCharacterStress($id, $type) {
+		$char = Character::find($id);
+		$type = strtolower($type);
+		$value = Input::get('value');
+		if(EditAPIController::validateOwner($char)) {
+			if($type == "physical") $char->physical_stress_taken = $value;
+			if($type == "mental") $char->mental_stress_taken = $value;
+			$char->save();	
+		} 
+	}
+	
 	public static function updateCharacterAspect($id, $position) {
 		$char = Character::find($id);
 		$value = Input::get('value');
 		if(EditAPIController::validateOwner($char)) {
-			$asp = $char->aspects()->where('position', $position)->first();
+			$asp = $char->consequences()->where('position', $position)->first();
 			if(isset($asp)) {
-				if(strlen($value) > 0) {
+				if(strlen($value) == 0) {
 					$asp->delete();
 				} else {
 					$asp->name = $value;
@@ -43,6 +71,30 @@ class EditApiController extends BaseController {
 				$asp->character_id = $id;
 				$asp->name = $value;
 				$asp->position = $position;
+				$asp->save();
+			}
+		}
+	}
+	
+		
+	public static function updateCharacterConsequence($id, $severity, $slot = 0) {
+		$char = Character::find($id);
+		$value = Input::get('value');
+		if(EditAPIController::validateOwner($char)) {
+			$asp = $char->consequences()->where('severity', $severity)->where('position', $slot)->first();
+			if(isset($asp)) {
+				if(strlen($value) == 0) {
+					$asp->delete();
+				} else {
+					$asp->name = $value;
+					$asp->save();
+				}
+			} else {
+				$asp = new Consequence();
+				$asp->character_id = $id;
+				$asp->name = $value;
+				$asp->severity = $severity;
+				$asp->position = $slot;
 				$asp->save();
 			}
 		}

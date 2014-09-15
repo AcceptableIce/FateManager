@@ -4,6 +4,8 @@
 	width: 1200px;
 	border: 1px solid #eaeaea;
 	height: 710px;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 
@@ -171,6 +173,10 @@
 	position: relative;
 }
 
+.sheet-skill-row-box:last-child {
+	margin-right: 0px;
+}
+
 .sheet-skill-row-box .sheet-editable {
 	text-align: center;
 }
@@ -237,6 +243,16 @@
 	top: -15px;
 	left: -10px;
 	-webkit-transform: scale(1.2, 1);
+}
+
+.sheet-stress-box.checked:after {
+	content: '×';
+	font-size: 34px;	
+	font-weight: 800;
+	position: relative;
+	left: 5px;		
+	line-height: 30px;
+	
 }
 
 .sheet-stress-1:before {
