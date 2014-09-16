@@ -54,6 +54,11 @@ Route::group(array('prefix' => 'api/v1'), function() {
 	Route::post('/character/{id}/update/skill/{rank}/{position}', 'EditAPIController@updateCharacterSkill');
 	
 	Route::get('/campaign/{id}/request/{request_id}/accept', 'CampaignAPIController@acceptCampaignRequest');
-	Route::get	('/campaign/{id}/request/{request_id}/reject', 'CampaignAPIController@rejectCampaignRequest');
+	Route::get('/campaign/{id}/request/{request_id}/reject', 'CampaignAPIController@rejectCampaignRequest');
+	Route::get('/campaign/{id}/skill/add', 'CampaignAPIController@addNewSkill');
+	Route::post('/campaign/{id}/skill/delete', 'CampaignAPIController@deleteSkill');
+	Route::post('/campaign/{id}/skill/{skill_id}/update/name', 'CampaignAPIController@updateSkillName');
+	Route::post('/campaign/{id}/skill/{skill_id}/update/physical', 'CampaignAPIController@setPhysicalSkill');
+	Route::post('/campaign/{id}/skill/{skill_id}/update/mental', 'CampaignAPIController@setMentalSkill');
 
 });

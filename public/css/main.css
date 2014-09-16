@@ -345,6 +345,22 @@ body {
 	margin-right: 15px;
 }
 
+.skill-label {
+	position: relative;
+	font-size: 14px;
+	top: 1px;
+}
+
+.add-skill {
+	padding: .25em 0.5em;
+	border: 1px solid #61bf83;
+	display: inline-block;
+	margin-top: 10px;
+	color: #fff;
+	background-color: #84c17e;
+	border-radius: 3px;
+}
+
 #main-content {
 	margin-left: 301px;
 	width: calc(100% - 300px);
