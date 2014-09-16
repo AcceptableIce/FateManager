@@ -42,6 +42,13 @@ class EditApiController extends BaseController {
 		}
 	}
 	
+	public static function updateCharacterStunts($id) {
+		$char = Character::find($id);
+		if(EditAPIController::validateOwner($char)) {
+			$char->stunts = Input::get('value');
+			$char->save();
+		}
+	}	
 	
 	public static function updateCharacterStress($id, $type) {
 		$char = Character::find($id);
@@ -95,6 +102,29 @@ class EditApiController extends BaseController {
 				$asp->name = $value;
 				$asp->severity = $severity;
 				$asp->position = $slot;
+				$asp->save();
+			}
+		}
+	}
+			
+	public static function updateCharacterSkill($id, $rank, $position) {
+		$char = Character::find($id);
+		$value = Input::get('value');
+		if(EditAPIController::validateOwner($char)) {
+			$asp = $char->skills()->where('rank', $rank)->where('position', $position)->first();
+			if(isset($asp)) {
+				if($value == 0) {
+					$asp->delete();
+				} else {
+					$asp->skill_id = $value;
+					$asp->save();
+				}
+			} else if($value != 0) {
+				$asp = new CharacterSkill();
+				$asp->character_id = $id;
+				$asp->skill_id = $value;
+				$asp->rank = $rank;
+				$asp->position = $position;
 				$asp->save();
 			}
 		}

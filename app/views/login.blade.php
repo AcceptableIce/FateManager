@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Pokemon Manager 2')
+@section('title', 'Login')
 @section('script')
 <script type="text/javascript">
 $(function() {

@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'FATE Manager')
+@section('title', strlen($character->name) > 0 ? $character->name : 'New Character')
 @section('includes')
 	<link rel='stylesheet' type='text/css' href='../css/charSheet.css' />
 	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -17,6 +17,18 @@
 		});
 		
 	}
+	
+	ko.observable.fn.silencable = function() {
+	    var self = this;
+	    this.pauseNotifications = false;  
+	    this.notifySubscribers = function(value, event) {
+	        if (!self.pauseNotifications) {
+	            ko.subscribable.fn.notifySubscribers.call(this, value, event);
+	        } 
+		};
+       
+		return this; 
+    }
 	
 })(ko);
 function FateSheetVM() {
@@ -36,9 +48,10 @@ function FateSheetVM() {
 	
 	for(i = 0; i < 5; i++) self.aspects[i].extend({'api': '/api/v1/character/{id}/update/aspect/' + i});
 	self.extras = ko.observable("{{$character->extras}}").extend({ 'api' : '/api/v1/character/{id}/update/extras' });
-	
-	self.physicalSkill = ko.observable("{{$character->campaign()->physicalSkill()->name}}");
-	self.mentalSkill = ko.observable("{{$character->campaign()->mentalSKill()->name}}");
+	self.stunts = ko.observable("{{$character->stunts}}").extend({ 'api' : '/api/v1/character/{id}/update/stunts' });
+
+	self.physicalSkill = ko.observable({ id: {{$character->campaign()->physicalSkill()->id}}, name: "{{$character->campaign()->physicalSkill()->name}}" });
+	self.mentalSkill = ko.observable({ id: {{$character->campaign()->mentalSkill()->id}}, name: "{{$character->campaign()->mentalSkill()->name}}" });
 
 	self.physicalStress = [];
 	var rawPhysicalStressValue = {{$character->physical_stress_taken}};
@@ -85,38 +98,36 @@ function FateSheetVM() {
 	for(i = 0; i < 5; i++) {
 		self.skills.push([]);
 		for(j = 0; j < 5; j++) {
-			self.skills[i].push(ko.observable(""));
+			self.skills[i].push(ko.observable(0).silencable());
+			self.skills[i][j].extend({ 'api' : '/api/v1/character/{id}/update/skill/' + (i + 1) + '/' + j })
 		}
 	}
-	var counts = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}
 	@foreach($character->skills()->get() as $s)
-		self.skills[{{$s->rank - 1}}][counts[{{$s->rank}}]++]("{{$s->definition()->name}}");
+		var skill = self.skills[{{$s->rank - 1}}][{{$s->position}}];
+		skill.pauseNotifications = true;
+		skill({{$s->definition()->id}});
+		skill.pauseNotifications = false;
 	@endforeach
 	
 	self.selectedSkills = ko.computed(function() {
 		var out = [];
 		for(i = 0; i < 5; i++) {
 			for(j = 0; j < 5; j++) {
-				out.push(self.skills[i][j]);
+				out.push(self.skills[i][j]());
 			}
 		}
+
 		return out;
 	});
 	
 	self.campaignSkillList = [];
 	@foreach($character->campaign()->skills()->get() as $s)
-	self.campaignSkillList.push("{{$s->name}}");
+	self.campaignSkillList.push({ id: {{$s->id}}, name: "{{$s->name}}" });
 	@endforeach
 	
-	self.availableSkills = ko.computed(function() {
-		var out = [""];
-		for(i = 0; i < self.campaignSkillList.length; i++) {
-			var found = false;
-			for(j = 0; j < self.selectedSkills().length; j++) {
-				if(self.campaignSkillList[i] === self.selectedSkills()[j]()) found = true;
-			}
-			if(!found) out.push(self.campaignSkillList[i]);
-		}
+	self.availableSkills = ko.computed(function(val) {
+		var out = [{ id: 0, name: ""}];
+		for(i = 0; i < self.campaignSkillList.length; i++) out.push(self.campaignSkillList[i]);
 		return out;
 	});
 	
@@ -134,7 +145,7 @@ function FateSheetVM() {
 	self.isSkillHighEnough = function(skill, rank) {
 		for(var i = rank; i < 6; i++) {
 			for(var j = 0; j < 5; j++) {
-				if(self.skills[i - 1][j]() == skill) return true;
+				if(self.skills[i - 1][j]() == skill.id) return true;
 			}
 		}	
 		return false;
@@ -178,14 +189,13 @@ ko.applyBindings(viewModel);
 			<!-- /ko -->
 
 		</div>
-		<!--<pre data-bind="text: ko.toJSON($root.skills)"></pre>-->
 		<div id="sheet-skill-set">
 			<div class="sheet-header" id="sheet-header-skills">Skills</div>
 			<!-- ko foreach: [4, 3, 2, 1, 0] -->
 				<div class="sheet-skill-row">
 					<div class="sheet-skill-row-descriptor" data-bind="text: $root.getSkillRowName($data)"></div>
 					<!-- ko foreach: $root.skills[$data] -->
-						<div class="sheet-skill-row-box" data-bind="css: {'muted': !$data }"><select class="sheet-editable" data-bind="value: $root.skills[$parent][$index()], options: $root.availableSkills"></select></div>
+						<div class="sheet-skill-row-box" data-bind="css: {'muted': !$data }"><select class="sheet-editable" data-bind="options: $root.availableSkills, value: $root.skills[$parent][$index()], optionsText: 'name', optionsValue: 'id'"></select></div>
 					<!-- /ko-->
 				</div>
 			<!-- /ko-->					
@@ -198,12 +208,12 @@ ko.applyBindings(viewModel);
 		</div>
 		<div id="sheet-stunts-set">
 			<div class="sheet-header" id="sheet-header-stunts">Stunts</div>
-			<div class="sheet-input-box" id="sheet-input-stunts"></div>
+			<div class="sheet-input-box" id="sheet-input-stunts"><textarea class="sheet-editable" data-bind="value: $root.stunts"></textarea></div>
 		</div>	
 	</div>
 	<div id="sheet-row-4">
 		<div id="sheet-stress-set">
-			<div class="sheet-header" id="sheet-header-physical-stress">Physical Stress <span class="sheet-header-subtext" data-bind="text: '(' + $root.physicalSkill() + ')'"></span></div>
+			<div class="sheet-header" id="sheet-header-physical-stress">Physical Stress <span class="sheet-header-subtext" data-bind="text: '(' + $root.physicalSkill().name + ')'"></span></div>
 			<div class="sheet-stress-row">
 				<div class="sheet-stress-box sheet-stress-1" data-bind="click: function() { checkPhysicalStressBox(0) }, css: { 'checked': $root.physicalStress[0] }"></div>
 				<div class="sheet-stress-box sheet-stress-2" data-bind="click: function() { checkPhysicalStressBox(1) }, css: { 'checked': $root.physicalStress[1] }"></div>
@@ -211,7 +221,7 @@ ko.applyBindings(viewModel);
 				<div class="sheet-stress-box sheet-stress-4" data-bind="click: function() { checkPhysicalStressBox(3) }, css: {'muted': !$root.isSkillHighEnough($root.physicalSkill(), 3), 'checked': $root.physicalStress[3] }"></div>
 
 			</div>
-			<div class="sheet-header" id="sheet-header-mental-stress">Mental Stress <span class="sheet-header-subtext" data-bind="text: '(' + $root.mentalSkill() + ')'"></span></div>
+			<div class="sheet-header" id="sheet-header-mental-stress">Mental Stress <span class="sheet-header-subtext" data-bind="text: '(' + $root.mentalSkill().name + ')'"></span></div>
 			<div class="sheet-stress-row">
 				<div class="sheet-stress-box sheet-stress-1" data-bind="click: function() { checkMentalStressBox(0) }, css: {'checked': $root.mentalStress[0] }"></div>
 				<div class="sheet-stress-box sheet-stress-2" data-bind="click: function() { checkMentalStressBox(1) }, css: {'checked': $root.mentalStress[1] }"></div>

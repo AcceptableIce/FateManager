@@ -1,0 +1,356 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	padding: 0 0;
+	margin: 0 0;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+#sidebar {
+	height: 100%;
+	width: 300px;
+	background-color: #333;
+	display: block;
+	vertical-align: top;
+	position: fixed;
+	font-family: Helvetica;
+	border-right: 1px solid #111;
+	overflow-y: auto;
+}
+
+#sidebar h3 {
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 14px;
+	text-shadow:0px 1px 0px #000;
+	margin-left: 15px;
+	position: relative;
+}
+
+.character-block, .campaign-block {
+	background-color: #555;
+	width: 100%;
+	height: 50px;
+	position: relative;
+	margin-bottom: 5px;
+}
+
+.character-active {
+	width: 5px;
+	height: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: #00cc00;
+}
+
+.character-inactive {
+	width: 5px;
+	height: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: #ccc;	
+}
+
+.character-name {
+	position: absolute;
+	top: 8px;
+	left: 25px;
+	color: #fff;
+	font-size: 18px;
+}
+
+.character-last-edited {
+	position: absolute;
+	text-align: left;
+	bottom: 7px;
+	left: 25px;
+	color: #ccc;
+	font-size: 10px;
+	text-transform: uppercase;
+}
+
+.new-character-button, .new-campaign-button {
+	position: absolute;
+	right: 10px;
+	top: -8px;
+	margin-top: 5px;
+	margin-bottom: 25px;
+	display: block;
+	color: #fff;
+	font-size: 12px;
+	background-color: #666;
+	text-transform: none;
+	padding: .25em .5em;
+	border: 1px solid #454545;
+	border-radius: 3px;
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	text-decoration: none;
+}
+
+.campaign-header {
+	margin-top: 30px;
+}
+
+.input-section {
+	width: 600px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: .5em .5em;
+	margin-bottom: 25px;
+}
+
+.input-section-title {
+	color: #333;
+	text-shadow: 0px 1px 0px #fff;
+	font-size: 24px;
+	font-weight: 300;
+	margin-bottom: 3px;
+}
+
+.input-block {
+	width: 100%;
+}
+
+.input-block:first-child {
+	margin-top: 10px;
+}
+
+.input-block:last-child {
+	margin-bottom: 10px;
+}
+
+.input-block label {
+	width: 150px;
+	text-align: right;
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.form-input-text {
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: .25em .5em;
+	font-size: 14px;
+	width: 250px;
+	position: relative;
+}
+
+.form-input-text:focus {
+	outline: none;
+	border: 1px solid #1a669f;	
+}
+
+.form-input-checkbox {
+	position: relative;
+	top: -1px;
+}
+
+.form-input-checkbox + p {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.form-input-submit {
+	background: #fff;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	padding: .5em 2em;
+	border-radius: 3px;
+}
+
+#new-character-settings-block {
+	padding-bottom: 0px;
+}
+
+.help-text {
+	color: #aaa;
+	font-style: italic;
+	font-weight: 300; 	
+	margin-left: 173px;
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+.offset-main-content {
+	padding-left: 40px;
+	width: calc(100% - 340px;)
+	overflow-x: auto;
+}
+
+.campaign-description {
+	margin-top: -15px;
+	margin-bottom: 15px;
+}
+
+.campaign-description-text {
+	color: #787878;
+	font-size: 14px;
+	font-style: italic;
+	width: 250px;
+	display: inline-block;
+}
+
+.campaign-description-edit {
+	color: #1a669f;
+}
+
+.campaign-description-field {
+	border: 1px solid #777;
+	background: #fff;
+	color: #787878;
+	font-size: 12px;
+	width: 246px;
+}
+
+.campaign-description-field:focus {
+	outline: none;
+	border-color: #1a669f;
+}
+
+.campaign-content-main {
+	width: 900px;
+	display: inline-block;
+	min-height: 500px;
+	margin-right: 0px;
+	float: left;
+	z-index: 10;
+	position: relative;
+	border-top: 1px solid #eee;
+}
+
+.campaign-content-sidebar {
+	width: 200px;
+	display: inline-block;
+	vertical-align: top;
+    box-shadow: inset 7px -2px 9px -9px rgba(0,0,0,0.3);
+    padding-top: 10px;
+	background-color: #fff;
+	min-height: 500px;
+	margin-left: 0px;
+	float: left;
+	z-index: 0;
+	position: relative;
+	padding-left: 15px;
+	border-left: 1px solid #eee;
+	
+}
+
+.campaign-sidebar-tab {
+	margin-bottom: 10px;	
+	padding: 0.8em 1em;
+	width: 150px;
+}
+
+.campaign-sidebar-tab.active {
+	background-color: #fff;
+	border: 1px solid #eee;
+	border-left: none;
+	margin-left: -16px;
+	z-index: 11;
+	position: relative;
+}
+
+.campaign-request-section {
+	width: 500px;
+}
+
+.campaign-request {
+	background-color: #d9edf7;
+	border: 1px solid #bce8f1;
+	width: 100%;
+	min-height: 50px;
+	padding: 5px 5px;	
+	box-sizing: border-box;	
+	position: relative;
+	margin-bottom: 10px;
+}
+
+.campaign-request:last-child {
+	margin-bottom: 0px;
+}
+
+.campaign-request-name {
+	color: #516068;
+	text-transform: uppercase;
+	font-weight: 800;
+	font-size: 14px;
+	left: 5px;
+	top: 5px;
+}
+
+.campaign-request-description {
+	margin-top: 5px;
+}
+
+.campaign-request-description a {
+	text-decoration: none;
+	color: #1a669f;
+}
+
+.campaign-request-date {
+	position: absolute;
+	font-size: 12px;
+	color: #516068;
+	text-transform: uppercase;
+	top: 7px;
+	right: 5px;
+}
+
+.campaign-request-accept, .campaign-request-reject {
+	user-select: none;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-right: 5px;
+	background-color: #fff;
+	border: 1px solid #bce8f1;	
+	display: inline-block;
+	font-size: 12px;
+	text-transform: uppercase;
+	font-weight: 800;
+	padding: .5em 1em;
+}
+
+.skill-remove {
+	color: #990000;
+	display: inline-block;
+	margin-top: -2px;
+}
+.skill-name {
+	display: inline-block;
+	font-size: 16px;
+	border: none;
+	border-bottom: 1px solid #777;
+	width: 150px;
+}
+
+.skill-name:focus {
+	border-bottom: 1px solid #1a669f;
+	outline: none;	
+}
+
+.skill-options {
+	display: inline-block;
+}
+
+.skill-check {
+	display: inline-block;
+	margin-right: 15px;
+}
+
+#main-content {
+	margin-left: 301px;
+	width: calc(100% - 300px);
+	display: inline-block;
+	overflow-x: auto;
+	font-family: 'Lato', Helvetica, sans-serif;
+	font-weight: 400;
+	height: 100%;
+}

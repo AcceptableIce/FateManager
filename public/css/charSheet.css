@@ -6,6 +6,8 @@
 	height: 710px;
 	-webkit-user-select: none;
 	user-select: none;
+	background-color: #fff;
+	margin-left: 0px;
 }
 
 
@@ -70,6 +72,14 @@
 #sheet-refresh-input {
 	font-size: 40px;
 	text-align: center;
+}
+
+#character-sheet select {
+	background: #fff;
+	border: none;
+	-webkit-appearance: textfield;
+	padding-bottom:0px;
+	padding-top:1px;
 }
 
 #sheet-logo {

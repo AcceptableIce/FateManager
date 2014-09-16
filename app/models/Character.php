@@ -2,7 +2,8 @@
 
 class Character extends Eloquent {
 	protected $table = 'characters';
-
+	public $timestamps = true;
+	
 	public function aspects() {
 		return $this->hasMany('Aspect')->orderBy('position');
 	}

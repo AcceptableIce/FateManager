@@ -15,8 +15,23 @@ Route::get('/', function() {
 	return View::make('hello');
 });
 
-Route::get('/test/{id}/', function($id) {
-	return View::make('test')->with('character', Character::find($id));
+Route::get('/character/new', function() {
+	return View::make('newCharacter');
+});
+
+
+Route::post('/character/new', 'HomeController@createNewCharacter');
+Route::get('/character/{id}', function($id) {
+	return View::make('character')->with('character', Character::find($id));
+});
+
+
+Route::get('/campaign/{id}', function($id) {
+	return View::make('campaignGeneral')->with('campaign', Campaign::find($id));
+});
+
+Route::get('/campaign/{id}/settings', function($id) {
+	return View::make('campaignSettings')->with('campaign', Campaign::find($id));
 });
 
 Route::get('logout', array('uses' => 'HomeController@doLogout'));
@@ -31,9 +46,14 @@ Route::group(array('prefix' => 'api/v1'), function() {
 	Route::post('/character/{id}/update/name', 'EditAPIController@updateCharacterName');
 	Route::post('/character/{id}/update/description', 'EditAPIController@updateCharacterDescription');
 	Route::post('/character/{id}/update/extras', 'EditAPIController@updateCharacterExtras');
+	Route::post('/character/{id}/update/stunts', 'EditAPIController@updateCharacterStunts');
 	Route::post('/character/{id}/update/refresh', 'EditAPIController@updateCharacterRefresh');
 	Route::post('/character/{id}/update/aspect/{position}', 'EditAPIController@updateCharacterAspect');
 	Route::post('/character/{id}/update/consequence/{severity}/{slot?}', 'EditAPIController@updateCharacterConsequence');
 	Route::post('/character/{id}/update/stress/{type}', 'EditAPIController@updateCharacterStress');
+	Route::post('/character/{id}/update/skill/{rank}/{position}', 'EditAPIController@updateCharacterSkill');
+	
+	Route::get('/campaign/{id}/request/{request_id}/accept', 'CampaignAPIController@acceptCampaignRequest');
+	Route::get	('/campaign/{id}/request/{request_id}/reject', 'CampaignAPIController@rejectCampaignRequest');
 
 });
