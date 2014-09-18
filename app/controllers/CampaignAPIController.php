@@ -80,7 +80,9 @@ class CampaignAPIController extends BaseController {
 		$user = Auth::user();
 		if($user->isCampaignAdmin($id)) {
 			$skill = SkillDefinition::find(Input::get('skill'));
+			$s_id = $skill->id;
 			$skill->delete();
+			CharacterSkill::where('skill_id', $s_id)->delete();
 			echo json_encode("Success!");
 		}
 	}

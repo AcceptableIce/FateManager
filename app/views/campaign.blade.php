@@ -40,10 +40,10 @@ ko.applyBindings(viewModel);
 		@yield('campaign-tab')
 	</div>
 	<div class="campaign-content-sidebar">
-		<div class="campaign-sidebar-tab active">General</div>
-		<div class="campaign-sidebar-tab">Roster</div>
-		<div class="campaign-sidebar-tab">Settings	</div>
-		<div class="campaign-sidebar-tab">Administration</div>
+		<div class="campaign-sidebar-tab {{$page == 'general' ? 'active' : ''}}">General</div>
+		<div class="campaign-sidebar-tab {{$page == 'roster' ? 'active' : ''}}">Roster</div>
+		<div class="campaign-sidebar-tab {{$page == 'settings' ? 'active' : ''}}">Settings	</div>
+		<div class="campaign-sidebar-tab {{$page == 'admin' ? 'active' : ''}}">Administration</div>
 
 	</div>
 </div>

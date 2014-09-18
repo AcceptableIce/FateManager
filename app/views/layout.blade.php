@@ -11,32 +11,40 @@
 		<title>@yield('title') - FATE Manager</title>
 	</head>
 	<body>
-		@if(isset($user))
-			<div id="sidebar">
-				<h3>My Characters <a href="/fatemanager/public/character/new" class="new-character-button">New Character</a></h3>					
-				
-				@foreach($user->characters()->get() as $c)
-					<a href="/fatemanager/public/character/{{$c->id}}"><div class="character-block">
-						<div class="character-{{$c->active  ? '' : 'in'}}active"></div>
-						<div class="character-name">{{strlen($c->name) > 0 ? $c->name : 'New Character'}}</div>
-						<div class="character-last-edited">Last edited {{HomeController::convertDateToHumanReadable($c->updated_at, time())}} ago</div>
-					</div></a>
-				@endforeach
-				<h3 class="campaign-header">My Campaigns<a class="new-campaign-button">New Campaign</a></h3>
-				@foreach($user->campaigns() as $c)
-					<a href="/fatemanager/public/campaign/{{$c->id}}"><div class="campaign-block">
-						<div class="character-name">{{$c->name}}</div>
-						<? $ct = count($c->characters()->get()); ?>
-						<div class="character-last-edited">{{$ct}} active character{{$ct == 1 ? '': 's'}}</div>
-					</div></a>
-				@endforeach
+		<div id="sidebar">
+			@if(isset($user))
+			<h3>My Characters <a href="/fatemanager/public/character/new" class="new-character-button">New Character</a></h3>					
+			
+			@foreach($user->characters()->get() as $c)
+				<a href="/fatemanager/public/character/{{$c->id}}"><div class="character-block">
+					<div class="character-{{$c->active  ? '' : 'in'}}active"></div>
+					<div class="character-name">{{strlen($c->name) > 0 ? $c->name : 'New Character'}}</div>
+					<div class="character-last-edited">Last edited {{HomeController::convertDateToHumanReadable($c->updated_at, time())}} ago</div>
+				</div></a>
+			@endforeach
+			<h3 class="campaign-header">My Campaigns<a class="new-campaign-button">New Campaign</a></h3>
+			@foreach($user->campaigns() as $c)
+				<a href="/fatemanager/public/campaign/{{$c->id}}"><div class="campaign-block">
+					<div class="character-name">{{$c->name}}</div>
+					<? $ct = count($c->characters()->get()); ?>
+					<div class="character-last-edited">{{$ct}} active character{{$ct == 1 ? '': 's'}}</div>
+				</div></a>
+			@endforeach
+		<div class="sidebar-bottom">
+			<div class="sidebar-button-set">
+				<a class="sidebar-button sidebar-logout-button" href="/fatemanager/public/logout">Logout</a>
+	
+				<?php $unseen_ct = count($user->unseenMessages()->get()); ?>
+				<a class="sidebar-button sidebar-message-button" href="/fatemanager/public/messages">Messages @if($unseen_ct > 0) ({{$unseen_ct}}) @endif</a>
 			</div>
-		@endif
-		<div id="main-content">
-		@yield('content')
 		</div>
-		<script src="/fatemanager/public/js/jquery-2.1.0.js"></script>
-		<script src="/fatemanager/public/js/knockout.js"></script>
-		@yield('script')
+		@endif
+	</div>
+	<div id="main-content">
+	@yield('content')
+	</div>
+	<script src="/fatemanager/public/js/jquery-2.1.0.js"></script>
+	<script src="/fatemanager/public/js/knockout.js"></script>
+	@yield('script')
 	</body>
 </html>

@@ -27,17 +27,25 @@ Route::get('/character/{id}', function($id) {
 
 
 Route::get('/campaign/{id}', function($id) {
-	return View::make('campaignGeneral')->with('campaign', Campaign::find($id));
+	return View::make('campaignGeneral')->with('campaign', Campaign::find($id))->with('page', 'general');
 });
 
 Route::get('/campaign/{id}/settings', function($id) {
-	return View::make('campaignSettings')->with('campaign', Campaign::find($id));
+	return View::make('campaignSettings')->with('campaign', Campaign::find($id))->with('page', 'settings');
+});
+
+Route::get('/campaign/{id}/admin', function($id) {
+	return View::make('campaignAdmin')->with('campaign', Campaign::find($id))->with('page', 'admin');
 });
 
 Route::get('logout', array('uses' => 'HomeController@doLogout'));
 
 Route::get('login', array('uses' => 'HomeController@showLogin'));
 Route::post('login', array('uses' => 'HomeController@doLogin'));
+
+Route::get('messages', function() {
+	return View::make('messages');
+});	
 
 Route::post('createAccount', array('uses' => 'HomeController@createAccount'));
 

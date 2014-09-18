@@ -50,8 +50,12 @@ function FateSheetVM() {
 	self.extras = ko.observable("{{$character->extras}}").extend({ 'api' : '/api/v1/character/{id}/update/extras' });
 	self.stunts = ko.observable("{{$character->stunts}}").extend({ 'api' : '/api/v1/character/{id}/update/stunts' });
 
-	self.physicalSkill = ko.observable({ id: {{$character->campaign()->physicalSkill()->id}}, name: "{{$character->campaign()->physicalSkill()->name}}" });
-	self.mentalSkill = ko.observable({ id: {{$character->campaign()->mentalSkill()->id}}, name: "{{$character->campaign()->mentalSkill()->name}}" });
+	<?php
+		$phys = $character->campaign()->physicalSkill();
+		$ment = $character->campaign()->mentalSkill();
+	?>
+	self.physicalSkill = ko.observable(@if(isset($phys)) { id: {{$phys->id}}, name: "{{$phys->name}}" } @else { id: 0, name: "Undefined" } @endif);
+	self.mentalSkill = ko.observable(@if(isset($ment)) { id: {{$ment->id}}, name: "{{$ment->name}}" } @else { id: 0, name: "Undefined" } @endif);
 
 	self.physicalStress = [];
 	var rawPhysicalStressValue = {{$character->physical_stress_taken}};

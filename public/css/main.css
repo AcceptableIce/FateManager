@@ -30,6 +30,42 @@ body {
 	position: relative;
 }
 
+.sidebar-bottom {
+	bottom: 10px;
+	position: absolute;
+	width: 100%;
+}
+
+.sidebar-button {
+	display: block;
+	color: #fff;
+	font-size: 14px;
+	background-color: #666;
+	text-transform: none;
+	padding: .25em .5em;
+	border: 1px solid #454545;
+	border-radius: 3px;
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	text-decoration: none;
+}
+
+.sidebar-button-set {
+	display: table;
+	margin: 0 auto;
+}
+
+.sidebar-message-button {
+	display: inline-block;
+	margin-left: 20px;
+
+}
+
+.sidebar-logout-button {
+	display: inline-block;
+}
+
 .character-block, .campaign-block {
 	background-color: #555;
 	width: 100%;

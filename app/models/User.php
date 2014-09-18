@@ -36,6 +36,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return count($pLine) > 0;
 	}
 	
+	public function messages() {
+		 return $this->hasMany('PlayerRequest');
+	}
+	
+	public function unseenMessages() {
+		return $this->messages()->where('seen', false);
+	}
+	
 	public function getAuthIdentifier() {
         return $this->id;
     }
